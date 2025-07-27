@@ -1,5 +1,6 @@
 package com.szlachta.rentals.exceptions;
 
+import com.szlachta.rentals.dto.BasicErrorResponse;
 import com.szlachta.rentals.dto.ValidationErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,15 @@ public class ControllerExceptionHadler {
             errors.add(new ValidationErrorResponse(field, message));
         }
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<BasicErrorResponse> handleNotFoundException(
+            NotFoundException ex
+    ) {
+        BasicErrorResponse error = new BasicErrorResponse();
+        error.setMessage(ex.getMessage());
+        return ResponseEntity.status(404).body(error);
     }
 }
