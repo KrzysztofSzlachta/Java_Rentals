@@ -4,11 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 
 @SuppressWarnings("unused")
 public class PersonRequest {
-    @NotBlank
+    @NotBlank( message = "to pole jest wymagane" )
     private String firstName;
-    @NotBlank
+    @NotBlank( message = "to pole jest wymagane" )
     private String lastName;
-    @NotBlank
+    @NotBlank( message = "to pole jest wymagane" )
     private String email;
 
     public String getFirstName() {
