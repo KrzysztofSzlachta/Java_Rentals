@@ -1,9 +1,14 @@
 package com.szlachta.rentals.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 @SuppressWarnings("unused")
 public class PersonRequest {
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
+    @NotBlank
     private String email;
 
     public String getFirstName() {
@@ -29,4 +34,5 @@ public class PersonRequest {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }
