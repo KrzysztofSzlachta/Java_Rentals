@@ -7,7 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/person")
+@RequestMapping("/api/people")
 public class PeopleController {
     private final PeopleService peopleService;
 
@@ -17,7 +17,7 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public PersonResponse getPerson(@PathVariable int id) {
-        return peopleService.getPerson(id);
+        return peopleService.getPersonById(id);
     }
 
     @PostMapping
