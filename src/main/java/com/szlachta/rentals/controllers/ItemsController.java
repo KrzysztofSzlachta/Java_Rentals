@@ -24,4 +24,14 @@ public class ItemsController {
     public void createItem(@RequestBody ItemRequest itemRequest) {
         itemsService.createItem(itemRequest);
     }
+
+    @PutMapping("/{id}")
+    public void updateItem(@RequestBody ItemRequest itemRequest, @PathVariable int id) {
+        itemsService.updateItem(itemRequest, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteItem(@PathVariable int id) {
+        itemsService.deleteItem(id);
+    }
 }

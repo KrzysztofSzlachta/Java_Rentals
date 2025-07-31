@@ -8,6 +8,9 @@ import com.szlachta.rentals.models.PersonEntity;
 import com.szlachta.rentals.repositories.PeopleRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class PeopleService {
     private final PeopleRepository peopleRepository;
@@ -26,8 +29,17 @@ public class PeopleService {
         return personMapper.fromEntity(personEntity);
     }
 
+    public List<PersonResponse> getPeople() {
+        Iterable<PersonEntity> peopleEntities = peopleRepository.findAll();
+        List<PersonResponse> peopleResponses = new ArrayList<>();
+        for (PersonEntity personEntity : peopleEntities) {
+            peopleResponses.add(personMapper.fromEntity(personEntity));
+        }
+        return peopleResponses;
+    }
+
     public void createPerson(PersonRequest personRequest) {
-        System.out.println("test");
+        //peopleRepository.save(personRequest);
     }
 
     public void updatePerson(PersonRequest personRequest, int id) {

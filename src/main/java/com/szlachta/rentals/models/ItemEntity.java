@@ -8,7 +8,7 @@ import jakarta.persistence.IdClass;
 @Entity(name = "items")
 public class ItemEntity {
     @Id
-    @Column(name = "id_person")
+    @Column(name = "id_item")
     private int id;
 
     @Column

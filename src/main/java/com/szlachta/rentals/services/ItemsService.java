@@ -29,4 +29,12 @@ public class ItemsService {
     public void createItem(ItemRequest itemRequest) {
         System.out.println("Test");
     }
+
+    public void updateItem(ItemRequest itemRequest, int id) {
+        System.out.println("Test");
+    }
+
+    public void deleteItem(int id) {
+        System.out.println("Test");
+    }
 }

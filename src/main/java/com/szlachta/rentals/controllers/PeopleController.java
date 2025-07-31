@@ -6,6 +6,8 @@ import com.szlachta.rentals.services.PeopleService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/people")
 public class PeopleController {
@@ -18,6 +20,11 @@ public class PeopleController {
     @GetMapping("/{id}")
     public PersonResponse getPerson(@PathVariable int id) {
         return peopleService.getPersonById(id);
+    }
+
+    @GetMapping
+    public List<PersonResponse> getPeople() {
+        return peopleService.getPeople();
     }
 
     @PostMapping
