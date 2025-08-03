@@ -6,7 +6,8 @@ import java.time.LocalDate;
 
 @Entity(name = "people")
 public class PersonEntity {
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PeopleGenerator")
+    @SequenceGenerator(name = "PeopleGenerator", sequenceName = "people_ID_person_seq", allocationSize = 1)
     @Id
     @Column(name = "id_person")
     private int id;

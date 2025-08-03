@@ -43,7 +43,18 @@ public class PeopleService {
     }
 
     public void updatePerson(PersonRequest personRequest, int id) {
+        PersonEntity personEntity = peopleRepository.findById(id).orElse(null);
+        if (personEntity == null) {
+            throw new NotFoundException("Person not found");
+        }
+        personEntity.setFirstName(personRequest.getFirstName());
+        personEntity.setLastName(personRequest.getLastName());
+        personEntity.setPesel(personRequest.getPesel());
+        personEntity.setDocumentNumber(personRequest.getDocumentNumber());
+        personEntity.setDocumentType(personRequest.getDocumentType());
+        personEntity.setBirthDate(personRequest.getBirthDate());
 
+        peopleRepository.save(personEntity);
     }
 
     public void deletePerson(int id) {
