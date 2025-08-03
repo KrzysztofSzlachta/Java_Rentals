@@ -39,11 +39,11 @@ public class PeopleService {
     }
 
     public void createPerson(PersonRequest personRequest) {
-        //peopleRepository.save(personRequest);
+        peopleRepository.save(personMapper.fromRequest(personRequest));
     }
 
     public void updatePerson(PersonRequest personRequest, int id) {
-        System.out.println(id);
+
     }
 
     public void deletePerson(int id) {

@@ -8,6 +8,9 @@ import com.szlachta.rentals.models.ItemEntity;
 import com.szlachta.rentals.repositories.ItemsRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ItemsService {
     private final ItemsRepository itemsRepository;
@@ -24,6 +27,15 @@ public class ItemsService {
             throw new NotFoundException("Item not found");
         }
         return itemMapper.fromEntity(itemEntity);
+    }
+
+    public List<ItemResponse> getItems() {
+        Iterable<ItemEntity> itemEntities = itemsRepository.findAll();
+        List<ItemResponse> itemResponses = new ArrayList<>();
+        for (ItemEntity itemEntity : itemEntities) {
+            itemResponses.add(itemMapper.fromEntity(itemEntity));
+        }
+        return itemResponses;
     }
 
     public void createItem(ItemRequest itemRequest) {

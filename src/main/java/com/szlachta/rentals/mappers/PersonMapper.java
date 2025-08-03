@@ -1,5 +1,6 @@
 package com.szlachta.rentals.mappers;
 
+import com.szlachta.rentals.dto.PersonRequest;
 import com.szlachta.rentals.dto.PersonResponse;
 import com.szlachta.rentals.models.PersonEntity;
 import org.springframework.stereotype.Component;
@@ -17,5 +18,18 @@ public class PersonMapper {
         personResponse.setBirthDate(personEntity.getBirthDate());
 
         return personResponse;
+    }
+
+    public PersonEntity fromRequest(PersonRequest personRequest) {
+        PersonEntity personEntity = new PersonEntity();
+
+        personEntity.setFirstName(personRequest.getFirstName());
+        personEntity.setLastName(personRequest.getLastName());
+        personEntity.setPesel(personRequest.getPesel());
+        personEntity.setDocumentNumber(personRequest.getDocumentNumber());
+        personEntity.setDocumentType(personRequest.getDocumentType());
+        personEntity.setBirthDate(personRequest.getBirthDate());
+
+        return personEntity;
     }
 }

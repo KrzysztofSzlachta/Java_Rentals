@@ -1,13 +1,12 @@
 package com.szlachta.rentals.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity(name = "people")
 public class PersonEntity {
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Id
     @Column(name = "id_person")
     private int id;

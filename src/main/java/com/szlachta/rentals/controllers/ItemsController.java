@@ -6,6 +6,8 @@ import com.szlachta.rentals.dto.ItemResponse;
 import com.szlachta.rentals.services.ItemsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/items")
 public class ItemsController {
@@ -18,6 +20,11 @@ public class ItemsController {
     @GetMapping("/{id}")
     public ItemResponse getItemById(@PathVariable int id) {
         return itemsService.getItemById(id);
+    }
+
+    @GetMapping
+    public List<ItemResponse> getAllItems() {
+        return itemsService.getItems();
     }
 
     @PostMapping

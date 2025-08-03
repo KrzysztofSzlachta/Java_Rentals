@@ -2,14 +2,18 @@ package com.szlachta.rentals.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
+import java.time.LocalDate;
+
 @SuppressWarnings("unused")
 public class PersonRequest {
     @NotBlank( message = "to pole jest wymagane" )
     private String firstName;
     @NotBlank( message = "to pole jest wymagane" )
     private String lastName;
-    @NotBlank( message = "to pole jest wymagane" )
-    private String email;
+    private String pesel;
+    private String documentNumber;
+    private String documentType;
+    private LocalDate birthDate;
 
     public String getFirstName() {
         return firstName;
@@ -27,12 +31,35 @@ public class PersonRequest {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPesel() {
+        return pesel;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPesel(String pesel) {
+        this.pesel = pesel;
     }
 
+    public String getDocumentNumber() {
+        return documentNumber;
+    }
+
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
+    }
+
+    public String getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
 }
