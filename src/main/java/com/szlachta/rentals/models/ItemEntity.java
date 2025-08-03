@@ -1,12 +1,12 @@
 package com.szlachta.rentals.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
+import jakarta.persistence.*;
+import org.hibernate.annotations.GenerationTime;
 
 @Entity(name = "items")
 public class ItemEntity {
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ItemsGenerator")
+    @SequenceGenerator(name = "ItemsGenerator", sequenceName = "items_id_item_seq", allocationSize = 1)
     @Id
     @Column(name = "id_item")
     private int id;

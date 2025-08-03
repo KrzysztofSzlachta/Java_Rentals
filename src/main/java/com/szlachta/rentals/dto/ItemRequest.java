@@ -1,9 +1,14 @@
 package com.szlachta.rentals.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class ItemRequest {
     private int id;
+    @NotBlank(message = "To pole jest wymagane")
     private String name;
     private String description;
+    @NotBlank(message = "To pole jest wymagane")
+    private String type;
     private boolean adultRequired;
 
     public int getId() {
@@ -30,7 +35,15 @@ public class ItemRequest {
         this.description = description;
     }
 
-    public boolean isAdultRequired() {
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public boolean getAdultRequired() {
         return adultRequired;
     }
 

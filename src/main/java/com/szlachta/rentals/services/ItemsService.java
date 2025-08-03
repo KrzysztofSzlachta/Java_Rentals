@@ -39,11 +39,21 @@ public class ItemsService {
     }
 
     public void createItem(ItemRequest itemRequest) {
-        System.out.println("Test");
+        itemsRepository.save(itemMapper.fromRequest(itemRequest));
     }
 
     public void updateItem(ItemRequest itemRequest, int id) {
-        System.out.println("Test");
+        ItemEntity itemEntity = itemsRepository.findById(id).orElse(null);
+        if (itemEntity == null) {
+            throw new NotFoundException("Item not found");
+        }
+
+        itemEntity.setName(itemRequest.getName());
+        itemEntity.setDescription(itemRequest.getDescription());
+        itemEntity.setType(itemRequest.getType());
+        itemEntity.setAdultRequired(itemRequest.getAdultRequired());
+
+        itemsRepository.save(itemEntity);
     }
 
     public void deleteItem(int id) {

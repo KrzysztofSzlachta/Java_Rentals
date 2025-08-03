@@ -5,6 +5,7 @@ public class ItemResponse {
     private int id;
     private String name;
     private String description;
+    private String type;
     private boolean adultRequired;
 
     public int getId() {
@@ -29,6 +30,14 @@ public class ItemResponse {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public boolean isAdultRequired() {
