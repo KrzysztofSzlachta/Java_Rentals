@@ -3,6 +3,7 @@ package com.szlachta.rentals.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity(name = "people")
 public class PersonEntity {
@@ -32,6 +33,9 @@ public class PersonEntity {
 
     @Column
     private boolean deleted;
+
+    @OneToMany(mappedBy = "person")
+    private List<ReservationEntity> reservations;
 
     public int getId() {
         return id;
@@ -97,4 +101,11 @@ public class PersonEntity {
         this.deleted = deleted;
     }
 
+    public List<ReservationEntity> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<ReservationEntity> reservations) {
+        this.reservations = reservations;
+    }
 }

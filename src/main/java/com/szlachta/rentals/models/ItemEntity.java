@@ -3,6 +3,8 @@ package com.szlachta.rentals.models;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenerationTime;
 
+import java.util.List;
+
 @Entity(name = "items")
 public class ItemEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ItemsGenerator")
@@ -25,6 +27,9 @@ public class ItemEntity {
 
     @Column
     private boolean deleted;
+
+    @OneToMany(mappedBy = "item")
+    private List<ReservationEntity> reservations;
 
     public int getId() {
         return id;
@@ -72,5 +77,13 @@ public class ItemEntity {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public List<ReservationEntity> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<ReservationEntity> reservations) {
+        this.reservations = reservations;
     }
 }
