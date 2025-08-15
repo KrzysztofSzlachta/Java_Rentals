@@ -3,7 +3,9 @@ package com.szlachta.rentals.mappers;
 import com.szlachta.rentals.dto.ReservationRequest;
 import com.szlachta.rentals.dto.ReservationResponse;
 import com.szlachta.rentals.models.ReservationEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ReservationMapper {
     public ReservationResponse fromEntity(ReservationEntity reservationEntity){
         PersonMapper personMapper = new PersonMapper();
