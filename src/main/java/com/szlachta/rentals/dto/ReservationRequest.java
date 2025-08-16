@@ -1,13 +1,17 @@
 package com.szlachta.rentals.dto;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
 public class ReservationRequest {
     @NotBlank( message = "to pole jest wymagane" )
+    @FutureOrPresent
     private LocalDateTime startTime;
     @NotBlank( message = "to pole jest wymagane" )
+    @Future
     private LocalDateTime endTime;
     @NotBlank( message = "to pole jest wymagane" )
     private PersonRequest person;
