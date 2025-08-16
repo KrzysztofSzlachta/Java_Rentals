@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-@Entity(name = "reservations")
+@Entity
+@Table(name = "reservations")
 public class ReservationEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ReservationsGenerator")
     @SequenceGenerator(name = "ReservationsGenerator", sequenceName = "reservations_id_reservation_seq", allocationSize = 1)

@@ -5,7 +5,8 @@ import org.hibernate.annotations.GenerationTime;
 
 import java.util.List;
 
-@Entity(name = "items")
+@Entity
+@Table(name = "items")
 public class ItemEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ItemsGenerator")
     @SequenceGenerator(name = "ItemsGenerator", sequenceName = "items_id_item_seq", allocationSize = 1)

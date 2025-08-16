@@ -1,5 +1,8 @@
 package com.szlachta.rentals.dto;
 
+import com.szlachta.rentals.models.ItemEntity;
+import com.szlachta.rentals.models.PersonEntity;
+import com.szlachta.rentals.validators.UniqueValue;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -8,6 +11,7 @@ public class ItemRequest {
     private int id;
     @NotBlank(message = "To pole jest wymagane")
     @Size(min = 3, max = 20, message = "Nazwa musi mieć od 3 do 20 znaków")
+    @UniqueValue(entity = ItemEntity.class, field = "name", message = "Przedmiot o tej nazwie już istnieje")
     private String name;
     @NotBlank(message = "To pole jest wymagane")
     @Max(value = 100, message = "Opis musi być krótszy niż 200 znaków")

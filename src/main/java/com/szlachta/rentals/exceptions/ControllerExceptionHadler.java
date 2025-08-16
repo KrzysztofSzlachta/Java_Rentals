@@ -4,6 +4,7 @@ import com.szlachta.rentals.dto.BasicErrorResponse;
 import com.szlachta.rentals.dto.ValidationErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +23,15 @@ public class ControllerExceptionHadler {
     ) {
         List<ValidationErrorResponse> errors = new ArrayList<>();
         for (ObjectError error : ex.getBindingResult().getAllErrors()) {
-            String field = error.getObjectName();
+            String field;
+
+            if (error instanceof FieldError fieldError){
+                field = error.getObjectName() + "." + fieldError.getField();
+            }
+            else {
+                field = error.getObjectName();
+            }
+
             String message = error.getDefaultMessage();
             errors.add(new ValidationErrorResponse(field, message));
         }

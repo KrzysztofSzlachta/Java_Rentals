@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity(name = "people")
+@Entity
+@Table(name = "people")
 public class PersonEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PeopleGenerator")
     @SequenceGenerator(name = "PeopleGenerator", sequenceName = "people_id_person_seq", allocationSize = 1)

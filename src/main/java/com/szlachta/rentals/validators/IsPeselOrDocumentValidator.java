@@ -8,12 +8,6 @@ public class IsPeselOrDocumentValidator implements ConstraintValidator<IsPeselOr
 
     @Override
     public boolean isValid(PersonRequest personRequest, ConstraintValidatorContext context) {
-        /*
-            if (personRequest == null) {
-            return true;
-        }
-        */
-
         boolean hasPesel = personRequest.getPesel() != null && !personRequest.getPesel().isBlank();
         boolean hasDocumentNumber = personRequest.getDocumentNumber() != null && !personRequest.getDocumentNumber().isBlank();
         boolean hasDocumentType = personRequest.getDocumentType() != null && !personRequest.getDocumentType().isBlank();
