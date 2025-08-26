@@ -47,4 +47,14 @@ public class ControllerExceptionHadler {
         error.setMessage(ex.getMessage());
         return ResponseEntity.status(404).body(error);
     }
+
+    @ExceptionHandler(UniqueException.class)
+    @ResponseStatus(HttpStatus.IM_USED)
+    public ResponseEntity<BasicErrorResponse> handleUniqueException(
+            UniqueException ex
+    ){
+        BasicErrorResponse error = new BasicErrorResponse();
+        error.setMessage(ex.getMessage());
+        return ResponseEntity.status(409).body(error);
+    }
 }

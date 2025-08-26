@@ -27,8 +27,9 @@ public class ReservationsController {
     }
 
     @PostMapping
-    public void createReservation(@RequestBody ReservationRequest reservationRequest) {
-        reservationsService.createReservation(reservationRequest);
+    public void createReservation(@RequestBody ReservationRequest reservationRequest,
+                                  @RequestParam("idPerson") int idPerson, @RequestParam("idItem") int idItem) {
+        reservationsService.createReservation(reservationRequest, idPerson, idItem);
     }
 
     @PutMapping("/{id}")

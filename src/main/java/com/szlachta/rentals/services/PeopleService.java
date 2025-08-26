@@ -3,6 +3,7 @@ package com.szlachta.rentals.services;
 import com.szlachta.rentals.dto.PersonRequest;
 import com.szlachta.rentals.dto.PersonResponse;
 import com.szlachta.rentals.exceptions.NotFoundException;
+import com.szlachta.rentals.exceptions.UniqueException;
 import com.szlachta.rentals.mappers.PersonMapper;
 import com.szlachta.rentals.models.PersonEntity;
 import com.szlachta.rentals.repositories.PeopleRepository;
@@ -39,7 +40,13 @@ public class PeopleService {
     }
 
     public void createPerson(PersonRequest personRequest) {
-        peopleRepository.save(personMapper.fromRequest(personRequest));
+        if(!peopleRepository.existsByPesel(personRequest.getPesel()) &&
+                !peopleRepository.existsByDocumentNumber(personRequest.getDocumentNumber())) {
+            peopleRepository.save(personMapper.fromRequest(personRequest));
+        }
+        else{
+            throw new UniqueException("Pesel or document number already exists");
+        }
     }
 
     public void updatePerson(PersonRequest personRequest, int id) {

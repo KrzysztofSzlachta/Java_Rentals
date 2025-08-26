@@ -44,7 +44,8 @@ public class ReservationsService {
         return reservationResponses;
     }
 
-    public void createReservation(ReservationRequest reservationRequest) {
+    public void createReservation(ReservationRequest reservationRequest, int idPerson, int idItem) {
+
         reservationsRepository.save(reservationMapper.fromRequest(reservationRequest));
     }
 
@@ -56,8 +57,8 @@ public class ReservationsService {
 
         reservationEntity.setStartTime(reservationRequest.getStartTime());
         reservationEntity.setEndTime(reservationRequest.getEndTime());
-        reservationEntity.setPerson(personMapper.fromRequest(reservationRequest.getPerson()));
-        reservationEntity.setItem(itemMapper.fromRequest(reservationRequest.getItem()));
+/*        reservationEntity.setPerson(personMapper.fromRequest(reservationRequest.getPerson()));
+        reservationEntity.setItem(itemMapper.fromRequest(reservationRequest.getItem()));*/
 
         reservationsRepository.save(reservationEntity);
     }
