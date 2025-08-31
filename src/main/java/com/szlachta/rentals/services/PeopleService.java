@@ -40,13 +40,17 @@ public class PeopleService {
     }
 
     public void createPerson(PersonRequest personRequest) {
-        if(!peopleRepository.existsByPesel(personRequest.getPesel()) &&
-                !peopleRepository.existsByDocumentNumber(personRequest.getDocumentNumber())) {
-            peopleRepository.save(personMapper.fromRequest(personRequest));
+        String pesel = personRequest.getPesel();
+        String documentNumber = personRequest.getDocumentNumber();
+        boolean peselCheck = pesel != null && !pesel.isEmpty();
+        boolean documentNumberCheck = documentNumber != null && !documentNumber.isEmpty();
+        if(peselCheck && peopleRepository.existsByPesel(pesel)) {
+            throw new UniqueException("Pesel jest już zarejestrowany");
         }
-        else{
-            throw new UniqueException("Pesel or document number already exists");
+        if(documentNumberCheck && peopleRepository.existsByDocumentNumber(documentNumber)) {
+            throw new UniqueException("DocumentNumber jest już zarejestrowany");
         }
+        peopleRepository.save(personMapper.fromRequest(personRequest));
     }
 
     public void updatePerson(PersonRequest personRequest, int id) {
