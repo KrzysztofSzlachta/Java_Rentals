@@ -57,6 +57,10 @@ public class ItemsService {
     }
 
     public void deleteItem(int id) {
-        System.out.println("Test");
+        ItemEntity itemEntity = itemsRepository.findById(id).orElse(null);
+        if (itemEntity == null) {
+            throw new NotFoundException("Item not found");
+        }
+        itemsRepository.delete(itemEntity);
     }
 }

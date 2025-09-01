@@ -32,9 +32,10 @@ public class ReservationsController {
         reservationsService.createReservation(reservationRequest, idPerson, idItem);
     }
 
-    @PutMapping("/{id}")
-    public void updateReservation(@PathVariable int id, @RequestBody ReservationRequest reservationRequest) {
-        reservationsService.updateReservation(reservationRequest, id);
+    @PutMapping
+    public void updateReservation(@RequestParam int idReservation, @RequestParam int idPerson, @RequestParam int idItem,
+                                  @RequestBody ReservationRequest reservationRequest) {
+        reservationsService.updateReservation(reservationRequest, idReservation, idPerson, idItem);
     }
 
     @DeleteMapping("/{id}")
