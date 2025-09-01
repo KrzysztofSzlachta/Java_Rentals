@@ -58,10 +58,21 @@ public class PeopleService {
         if (personEntity == null) {
             throw new NotFoundException("Person not found");
         }
+
+        String pesel = personRequest.getPesel();
+        String documentNumber = personRequest.getDocumentNumber();
+        boolean peselCheck = pesel != null && !pesel.isEmpty();
+        boolean documentNumberCheck = documentNumber != null && !documentNumber.isEmpty();
+        if(peselCheck && peopleRepository.existsByPeselAndIdNot(pesel, id)) {
+            throw new UniqueException("Pesel jest już zarejestrowany");
+        }
+        if(documentNumberCheck && peopleRepository.existsByDocumentNumberAndIdNot(documentNumber, id)) {
+            throw new UniqueException("DocumentNumber jest już zarejestrowany");
+        }
         personEntity.setFirstName(personRequest.getFirstName());
         personEntity.setLastName(personRequest.getLastName());
-        personEntity.setPesel(personRequest.getPesel());
-        personEntity.setDocumentNumber(personRequest.getDocumentNumber());
+        personEntity.setPesel(pesel);
+        personEntity.setDocumentNumber(documentNumber);
         personEntity.setDocumentType(personRequest.getDocumentType());
         personEntity.setBirthDate(personRequest.getBirthDate());
 
@@ -69,6 +80,19 @@ public class PeopleService {
     }
 
     public void deletePerson(int id) {
-        System.out.println(id);
+        PersonEntity personEntity = peopleRepository.findById(id).orElse(null);
+        if (personEntity == null) {
+            throw new NotFoundException("Person not found");
+        }
+
+        personEntity.setFirstName(null);
+        personEntity.setLastName(null);
+        personEntity.setPesel(null);
+        personEntity.setDocumentNumber(null);
+        personEntity.setDocumentType(null);
+        personEntity.setBirthDate(null);
+        personEntity.setDeleted(true);
+
+        peopleRepository.save(personEntity);
     }
 }
