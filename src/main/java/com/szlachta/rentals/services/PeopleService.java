@@ -9,6 +9,7 @@ import com.szlachta.rentals.models.PersonEntity;
 import com.szlachta.rentals.repositories.PeopleRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,12 +86,12 @@ public class PeopleService {
             throw new NotFoundException("Person not found");
         }
 
-        personEntity.setFirstName(null);
-        personEntity.setLastName(null);
+        personEntity.setFirstName("deleted");
+        personEntity.setLastName("deleted");
         personEntity.setPesel(null);
         personEntity.setDocumentNumber(null);
-        personEntity.setDocumentType(null);
-        personEntity.setBirthDate(null);
+        personEntity.setDocumentType("Deletion date:");
+        personEntity.setBirthDate(LocalDate.now());
         personEntity.setDeleted(true);
 
         peopleRepository.save(personEntity);
