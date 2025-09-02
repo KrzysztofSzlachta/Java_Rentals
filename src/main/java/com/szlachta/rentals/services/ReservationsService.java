@@ -2,6 +2,8 @@ package com.szlachta.rentals.services;
 
 import com.szlachta.rentals.dto.ReservationRequest;
 import com.szlachta.rentals.dto.ReservationResponse;
+import com.szlachta.rentals.dto.SearchByItemReservationResponse;
+import com.szlachta.rentals.dto.SearchByPersonReservationResponse;
 import com.szlachta.rentals.exceptions.NotFoundException;
 import com.szlachta.rentals.mappers.ItemMapper;
 import com.szlachta.rentals.mappers.PersonMapper;
@@ -54,8 +56,10 @@ public class ReservationsService {
 
     public void createReservation(ReservationRequest reservationRequest, int idPerson, int idItem) {
         ReservationEntity reservationEntity = new ReservationEntity();
-        reservationEntity.setPerson(peopleRepository.findById(idPerson).orElse(null));
-        reservationEntity.setItem(itemsRepository.findById(idItem).orElse(null));
+        reservationEntity.setPerson(peopleRepository.findById(idPerson).orElseThrow(()
+                -> new NotFoundException("Person not found")));
+        reservationEntity.setItem(itemsRepository.findById(idItem).orElseThrow(()
+                -> new NotFoundException("Item not found")));
         reservationEntity.setStartTime(reservationRequest.getStartTime());
         reservationEntity.setEndTime(reservationRequest.getEndTime());
 
@@ -84,5 +88,23 @@ public class ReservationsService {
             throw new NotFoundException("Reservation not found");
         }
         reservationsRepository.delete(reservationEntity);
+    }
+
+    public List<SearchByPersonReservationResponse> getReservationsByPerson(int idPerson) {
+        List<ReservationEntity> reservationEntities = reservationsRepository.findByPersonId(idPerson);
+        List<SearchByPersonReservationResponse> searchByPersonReservationResponses = new ArrayList<>();
+        for (ReservationEntity reservationEntity : reservationEntities) {
+            searchByPersonReservationResponses.add(reservationMapper.searchByPersonFromEntity(reservationEntity));
+        }
+        return searchByPersonReservationResponses;
+    }
+
+    public List<SearchByItemReservationResponse> getReservationsByItem(int idItem) {
+        List<ReservationEntity> reservationEntities = reservationsRepository.findByItemId(idItem);
+        List<SearchByItemReservationResponse> searchByItemReservationResponses = new ArrayList<>();
+        for (ReservationEntity reservationEntity : reservationEntities) {
+            searchByItemReservationResponses.add(reservationMapper.searchByItemFromEntity(reservationEntity));
+        }
+        return searchByItemReservationResponses;
     }
 }

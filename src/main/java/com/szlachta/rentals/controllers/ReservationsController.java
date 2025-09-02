@@ -2,6 +2,8 @@ package com.szlachta.rentals.controllers;
 
 import com.szlachta.rentals.dto.ReservationRequest;
 import com.szlachta.rentals.dto.ReservationResponse;
+import com.szlachta.rentals.dto.SearchByItemReservationResponse;
+import com.szlachta.rentals.dto.SearchByPersonReservationResponse;
 import com.szlachta.rentals.services.ReservationsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,5 +43,15 @@ public class ReservationsController {
     @DeleteMapping("/{id}")
     public void deleteReservation(@PathVariable int id) {
         reservationsService.deleteReservation(id);
+    }
+
+    @GetMapping("/search/byPerson")
+    public List<SearchByPersonReservationResponse> searchByPerson(@RequestParam int idPerson) {
+        return reservationsService.getReservationsByPerson(idPerson);
+    }
+
+    @GetMapping("/search/byItem")
+    public List<SearchByItemReservationResponse> searchByItem(@RequestParam int idItem) {
+        return reservationsService.getReservationsByItem(idItem);
     }
 }
