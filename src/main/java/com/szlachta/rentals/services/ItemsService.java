@@ -24,7 +24,7 @@ public class ItemsService {
     public ItemResponse getItemById(int id) {
         ItemEntity itemEntity = itemsRepository.findById(id).orElse(null);
         if (itemEntity == null) {
-            throw new NotFoundException("Item not found");
+            throw new NotFoundException("Przedmiot nie znaleziony");
         }
         return itemMapper.fromEntity(itemEntity);
     }
@@ -45,7 +45,7 @@ public class ItemsService {
     public void updateItem(ItemRequest itemRequest, int id) {
         ItemEntity itemEntity = itemsRepository.findById(id).orElse(null);
         if (itemEntity == null) {
-            throw new NotFoundException("Item not found");
+            throw new NotFoundException("Przedmiot nie znaleziony");
         }
 
         itemEntity.setName(itemRequest.getName());
@@ -59,7 +59,7 @@ public class ItemsService {
     public void deleteItem(int id) {
         ItemEntity itemEntity = itemsRepository.findById(id).orElse(null);
         if (itemEntity == null) {
-            throw new NotFoundException("Item not found");
+            throw new NotFoundException("Przedmiot nie znaleziony");
         }
         itemsRepository.delete(itemEntity);
     }

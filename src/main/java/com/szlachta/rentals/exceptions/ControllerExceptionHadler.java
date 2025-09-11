@@ -48,13 +48,23 @@ public class ControllerExceptionHadler {
         return ResponseEntity.status(404).body(error);
     }
 
-    @ExceptionHandler(UniqueException.class)
+    @ExceptionHandler(InUseException.class)
     @ResponseStatus(HttpStatus.IM_USED)
-    public ResponseEntity<BasicErrorResponse> handleUniqueException(
-            UniqueException ex
+    public ResponseEntity<BasicErrorResponse> handleInUseException(
+            InUseException ex
     ){
         BasicErrorResponse error = new BasicErrorResponse();
         error.setMessage(ex.getMessage());
         return ResponseEntity.status(409).body(error);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<BasicErrorResponse> handleBadRequestException(
+            BadRequestException ex
+    ){
+        BasicErrorResponse error = new BasicErrorResponse();
+        error.setMessage(ex.getMessage());
+        return ResponseEntity.status(400).body(error);
     }
 }

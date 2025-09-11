@@ -3,19 +3,20 @@ package com.szlachta.rentals.dto;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
 public class ReservationRequest {
-    @NotBlank( message = "to pole jest wymagane" )
-    @FutureOrPresent
+    @NotNull( message = "to pole jest wymagane" )
+    @FutureOrPresent(message = "początek rezerwacji nie może być przeszły")
     private LocalDateTime startTime;
-    @NotBlank( message = "to pole jest wymagane" )
-    @Future
+    @NotNull( message = "to pole jest wymagane" )
+    @Future (message = "koniec rezerwacji nie może być przeszły ani teraźniejszy")
     private LocalDateTime endTime;
-    @NotBlank( message = "to pole jest wymagane" )
+    //@NotNull( message = "to pole jest wymagane" )
     private PersonRequest person;
-    @NotBlank( message = "to pole jest wymagane" )
+    //@NotNull( message = "to pole jest wymagane" )
     private ItemRequest item;
 
     public LocalDateTime getStartTime() {

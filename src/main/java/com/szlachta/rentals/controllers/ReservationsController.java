@@ -5,6 +5,7 @@ import com.szlachta.rentals.dto.ReservationResponse;
 import com.szlachta.rentals.dto.SearchByItemReservationResponse;
 import com.szlachta.rentals.dto.SearchByPersonReservationResponse;
 import com.szlachta.rentals.services.ReservationsService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,14 +30,15 @@ public class ReservationsController {
     }
 
     @PostMapping
-    public void createReservation(@RequestBody ReservationRequest reservationRequest,
+    public void createReservation(@RequestBody @Valid ReservationRequest reservationRequest,
                                   @RequestParam("idPerson") int idPerson, @RequestParam("idItem") int idItem) {
         reservationsService.createReservation(reservationRequest, idPerson, idItem);
     }
 
     @PutMapping
-    public void updateReservation(@RequestParam int idReservation, @RequestParam int idPerson, @RequestParam int idItem,
-                                  @RequestBody ReservationRequest reservationRequest) {
+    public void updateReservation(@Valid @RequestBody ReservationRequest reservationRequest,
+                                  @RequestParam int idReservation, @RequestParam int idPerson, @RequestParam int idItem
+                                  ) {
         reservationsService.updateReservation(reservationRequest, idReservation, idPerson, idItem);
     }
 

@@ -4,18 +4,19 @@ import com.szlachta.rentals.dto.ReservationRequest;
 import com.szlachta.rentals.dto.ReservationResponse;
 import com.szlachta.rentals.dto.SearchByItemReservationResponse;
 import com.szlachta.rentals.dto.SearchByPersonReservationResponse;
+import com.szlachta.rentals.exceptions.BadRequestException;
 import com.szlachta.rentals.exceptions.NotFoundException;
+import com.szlachta.rentals.exceptions.InUseException;
 import com.szlachta.rentals.mappers.ItemMapper;
 import com.szlachta.rentals.mappers.PersonMapper;
 import com.szlachta.rentals.mappers.ReservationMapper;
-import com.szlachta.rentals.models.ItemEntity;
-import com.szlachta.rentals.models.PersonEntity;
 import com.szlachta.rentals.models.ReservationEntity;
 import com.szlachta.rentals.repositories.ItemsRepository;
 import com.szlachta.rentals.repositories.PeopleRepository;
 import com.szlachta.rentals.repositories.ReservationsRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class ReservationsService {
     public ReservationResponse getReservationById(int id) {
         ReservationEntity reservationEntity = reservationsRepository.findById(id).orElse(null);
         if (reservationEntity == null) {
-            throw new NotFoundException("Reservation not found");
+            throw new NotFoundException("Rezerwacja nie znaleziona");
         }
         return reservationMapper.fromEntity(reservationEntity);
     }
@@ -55,13 +56,32 @@ public class ReservationsService {
     }
 
     public void createReservation(ReservationRequest reservationRequest, int idPerson, int idItem) {
+        LocalDateTime startTime = reservationRequest.getStartTime();
+        LocalDateTime endTime = reservationRequest.getEndTime();
+
         ReservationEntity reservationEntity = new ReservationEntity();
         reservationEntity.setPerson(peopleRepository.findById(idPerson).orElseThrow(()
-                -> new NotFoundException("Person not found")));
+                -> new NotFoundException("Osoba nie znaleziona")));
         reservationEntity.setItem(itemsRepository.findById(idItem).orElseThrow(()
-                -> new NotFoundException("Item not found")));
-        reservationEntity.setStartTime(reservationRequest.getStartTime());
-        reservationEntity.setEndTime(reservationRequest.getEndTime());
+                -> new NotFoundException("Przedmiot nie znaleziony")));
+        if (reservationsRepository.existsByPersonIdAndDeletedIsTrue(idPerson)) {
+            throw new NotFoundException("Osoba o tym numerze id jest usunięta");
+        }
+        if (reservationsRepository.existsByItemIdAndStartTimeIsBeforeAndEndTimeIsAfter(idItem, startTime, endTime)) {
+            throw new InUseException("Przedmiot zarezerwowany. Spóbuj innej daty");
+        }
+        if (endTime.isBefore(startTime)) {
+            throw new BadRequestException("Rezerwacja musi się kończyć po tym, jak się zaczyna");
+        }
+        if (reservationsRepository.existsByItemIdAndStartTimeIsBetween(idItem, startTime, endTime)) {
+            throw new InUseException("Przedmiot zarezerwowany. Spróbuj wcześniejszej daty");
+        }
+        if (reservationsRepository.existsByItemIdAndEndTimeIsBetween(idItem, startTime, endTime)) {
+            throw new InUseException("Przedmiot zarezerwowany. Spróbuj późniejszej daty");
+        }
+
+        reservationEntity.setStartTime(startTime);
+        reservationEntity.setEndTime(endTime);
 
         reservationsRepository.save(reservationEntity);
     }
@@ -69,15 +89,33 @@ public class ReservationsService {
     public void updateReservation(ReservationRequest reservationRequest, int idReservation, int idPerson, int idItem) {
         ReservationEntity reservationEntity = reservationsRepository.findById(idReservation).orElse(null);
         if (reservationEntity == null) {
-            throw new NotFoundException("Reservation not found");
+            throw new NotFoundException("Rezerwacja nie znaleziona");
+        }
+        LocalDateTime startTime = reservationRequest.getStartTime();
+        LocalDateTime endTime = reservationRequest.getEndTime();
+
+        reservationEntity.setPerson(peopleRepository.findById(idPerson).orElseThrow(()
+                -> new NotFoundException("Osoba nie znaleziona")));
+        reservationEntity.setItem(itemsRepository.findById(idItem).orElseThrow(()
+                -> new NotFoundException("Przedmiot nie znaleziony")));
+        if (reservationsRepository.existsByPersonIdAndDeletedIsTrue(idPerson)) {
+            throw new NotFoundException("Osoba o tym numerze id jest usunięta");
+        }
+        if (reservationsRepository.existsByItemIdAndStartTimeIsBeforeAndEndTimeIsAfter(idItem, startTime, endTime)) {
+            throw new InUseException("Przedmiot zarezerwowany. Spóbuj innej daty");
+        }
+        if (endTime.isBefore(startTime)) {
+            throw new BadRequestException("Rezerwacja musi się kończyć po tym, jak się zaczyna");
+        }
+        if (reservationsRepository.existsByItemIdAndStartTimeIsBetween(idItem, startTime, endTime)) {
+            throw new InUseException("Przedmiot zarezerwowany. Spróbuj wcześniejszej daty");
+        }
+        if (reservationsRepository.existsByItemIdAndEndTimeIsBetween(idItem, startTime, endTime)) {
+            throw new InUseException("Przedmiot zarezerwowany. Spróbuj późniejszej daty");
         }
 
-        reservationEntity.setStartTime(reservationRequest.getStartTime());
-        reservationEntity.setEndTime(reservationRequest.getEndTime());
-        reservationEntity.setPerson(peopleRepository.findById(idPerson).orElseThrow(()
-                -> new NotFoundException("Person not found")));
-        reservationEntity.setItem(itemsRepository.findById(idItem).orElseThrow(()
-                -> new NotFoundException("Item not found")));
+        reservationEntity.setStartTime(startTime);
+        reservationEntity.setEndTime(endTime);
 
         reservationsRepository.save(reservationEntity);
     }
@@ -85,7 +123,7 @@ public class ReservationsService {
     public void deleteReservation(int id) {
         ReservationEntity reservationEntity = reservationsRepository.findById(id).orElse(null);
         if (reservationEntity == null) {
-            throw new NotFoundException("Reservation not found");
+            throw new NotFoundException("Rezerwacja nie znaleziona");
         }
         reservationsRepository.delete(reservationEntity);
     }

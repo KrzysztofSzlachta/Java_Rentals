@@ -2,6 +2,7 @@ package com.szlachta.rentals.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class ItemRequest {
@@ -15,7 +16,7 @@ public class ItemRequest {
     @NotBlank(message = "To pole jest wymagane")
     @Size(min = 3, max = 20, message = "Typ musi mieć od 3 do 20 znaków")
     private String type;
-    @NotBlank(message = "To pole jest wymagane")
+    @NotNull(message = "To pole jest wymagane")
     private boolean adultRequired;
 
     public int getId() {
