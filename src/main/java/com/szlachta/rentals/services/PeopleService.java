@@ -24,7 +24,7 @@ public class PeopleService {
     }
 
     public PersonResponse getPersonById(int id) {
-        PersonEntity personEntity = peopleRepository.findById(id).orElse(null);
+        PersonEntity personEntity = peopleRepository.findByIdAndDeletedIsFalse(id).orElse(null);
         if (personEntity == null) {
             throw new NotFoundException("Person not found");
         }
@@ -45,17 +45,17 @@ public class PeopleService {
         String documentNumber = personRequest.getDocumentNumber();
         boolean peselCheck = pesel != null && !pesel.isEmpty();
         boolean documentNumberCheck = documentNumber != null && !documentNumber.isEmpty();
-        if(peselCheck && peopleRepository.existsByPesel(pesel)) {
+        if(peselCheck && peopleRepository.existsByPeselAndDeletedIsTrue(pesel)) {
             throw new InUseException("Pesel jest już zarejestrowany");
         }
-        if(documentNumberCheck && peopleRepository.existsByDocumentNumber(documentNumber)) {
+        if(documentNumberCheck && peopleRepository.existsByDocumentNumberAndDeletedIsTrue(documentNumber)) {
             throw new InUseException("Numer dokumentu jest już zarejestrowany");
         }
         peopleRepository.save(personMapper.fromRequest(personRequest));
     }
 
     public void updatePerson(PersonRequest personRequest, int id) {
-        PersonEntity personEntity = peopleRepository.findById(id).orElse(null);
+        PersonEntity personEntity = peopleRepository.findByIdAndDeletedIsFalse(id).orElse(null);
         if (personEntity == null) {
             throw new NotFoundException("Osoba nie znaleziona");
         }
@@ -64,10 +64,10 @@ public class PeopleService {
         String documentNumber = personRequest.getDocumentNumber();
         boolean peselCheck = pesel != null && !pesel.isEmpty();
         boolean documentNumberCheck = documentNumber != null && !documentNumber.isEmpty();
-        if(peselCheck && peopleRepository.existsByPeselAndIdNot(pesel, id)) {
+        if(peselCheck && peopleRepository.existsByPeselAndIdNotAndDeletedIsFalse(pesel, id)) {
             throw new InUseException("Pesel jest już zarejestrowany");
         }
-        if(documentNumberCheck && peopleRepository.existsByDocumentNumberAndIdNot(documentNumber, id)) {
+        if(documentNumberCheck && peopleRepository.existsByDocumentNumberAndIdNotAndDeletedIsFalse(documentNumber, id)) {
             throw new InUseException("Numer dokumentu jest już zarejestrowany");
         }
         personEntity.setFirstName(personRequest.getFirstName());
@@ -81,7 +81,7 @@ public class PeopleService {
     }
 
     public void deletePerson(int id) {
-        PersonEntity personEntity = peopleRepository.findById(id).orElse(null);
+        PersonEntity personEntity = peopleRepository.findByIdAndDeletedIsFalse(id).orElse(null);
         if (personEntity == null) {
             throw new NotFoundException("Osoba nie znaleziona");
         }

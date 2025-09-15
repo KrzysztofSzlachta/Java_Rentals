@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface ReservationsRepository extends CrudRepository<ReservationEntity, Integer> {
     List<ReservationEntity> findByPersonId(int personId);
@@ -13,5 +14,4 @@ public interface ReservationsRepository extends CrudRepository<ReservationEntity
     boolean existsByItemIdAndStartTimeIsBetween(int itemId, LocalDateTime startTime, LocalDateTime endTime);
     boolean existsByItemIdAndStartTimeIsBeforeAndEndTimeIsAfter
             (int itemId, LocalDateTime startTime, LocalDateTime endTime);
-    boolean existsByPersonIdAndDeletedIsTrue(int personId);
 }

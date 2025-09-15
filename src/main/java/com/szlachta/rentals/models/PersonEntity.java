@@ -23,6 +23,7 @@ public class PersonEntity {
     @Column
     private String pesel;
 
+    // todo Change to Enum
     @Column(name = "document_nr")
     private String documentNumber;
 

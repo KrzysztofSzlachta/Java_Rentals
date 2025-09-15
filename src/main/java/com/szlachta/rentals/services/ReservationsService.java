@@ -60,13 +60,10 @@ public class ReservationsService {
         LocalDateTime endTime = reservationRequest.getEndTime();
 
         ReservationEntity reservationEntity = new ReservationEntity();
-        reservationEntity.setPerson(peopleRepository.findById(idPerson).orElseThrow(()
+        reservationEntity.setPerson(peopleRepository.findByIdAndDeletedIsFalse(idPerson).orElseThrow(()
                 -> new NotFoundException("Osoba nie znaleziona")));
-        reservationEntity.setItem(itemsRepository.findById(idItem).orElseThrow(()
+        reservationEntity.setItem(itemsRepository.findByIdAndDeletedIsFalse(idItem).orElseThrow(()
                 -> new NotFoundException("Przedmiot nie znaleziony")));
-        if (reservationsRepository.existsByPersonIdAndDeletedIsTrue(idPerson)) {
-            throw new NotFoundException("Osoba o tym numerze id jest usunięta");
-        }
         if (reservationsRepository.existsByItemIdAndStartTimeIsBeforeAndEndTimeIsAfter(idItem, startTime, endTime)) {
             throw new InUseException("Przedmiot zarezerwowany. Spóbuj innej daty");
         }
@@ -94,13 +91,10 @@ public class ReservationsService {
         LocalDateTime startTime = reservationRequest.getStartTime();
         LocalDateTime endTime = reservationRequest.getEndTime();
 
-        reservationEntity.setPerson(peopleRepository.findById(idPerson).orElseThrow(()
+        reservationEntity.setPerson(peopleRepository.findByIdAndDeletedIsFalse(idPerson).orElseThrow(()
                 -> new NotFoundException("Osoba nie znaleziona")));
-        reservationEntity.setItem(itemsRepository.findById(idItem).orElseThrow(()
+        reservationEntity.setItem(itemsRepository.findByIdAndDeletedIsFalse(idItem).orElseThrow(()
                 -> new NotFoundException("Przedmiot nie znaleziony")));
-        if (reservationsRepository.existsByPersonIdAndDeletedIsTrue(idPerson)) {
-            throw new NotFoundException("Osoba o tym numerze id jest usunięta");
-        }
         if (reservationsRepository.existsByItemIdAndStartTimeIsBeforeAndEndTimeIsAfter(idItem, startTime, endTime)) {
             throw new InUseException("Przedmiot zarezerwowany. Spóbuj innej daty");
         }

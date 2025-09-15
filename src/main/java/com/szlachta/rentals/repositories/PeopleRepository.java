@@ -3,10 +3,14 @@ package com.szlachta.rentals.repositories;
 import com.szlachta.rentals.models.PersonEntity;
 import org.springframework.data.repository.CrudRepository;
 
-public interface PeopleRepository extends CrudRepository<PersonEntity, Integer> {
-    boolean existsByDocumentNumber(String documentNumber);
-    boolean existsByPesel(String pesel);
+import java.util.Optional;
 
-    boolean existsByPeselAndIdNot(String pesel, Integer id);
-    boolean existsByDocumentNumberAndIdNot(String documentNumber, Integer id);
+public interface PeopleRepository extends CrudRepository<PersonEntity, Integer> {
+    boolean existsByDocumentNumberAndDeletedIsTrue(String documentNumber);
+    boolean existsByPeselAndDeletedIsTrue(String pesel);
+
+    boolean existsByPeselAndIdNotAndDeletedIsFalse(String pesel, Integer id);
+    boolean existsByDocumentNumberAndIdNotAndDeletedIsFalse(String documentNumber, Integer id);
+
+    Optional<PersonEntity> findByIdAndDeletedIsFalse(Integer id);
 }
