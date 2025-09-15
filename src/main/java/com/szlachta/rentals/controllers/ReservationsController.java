@@ -52,8 +52,18 @@ public class ReservationsController {
         return reservationsService.getReservationsByPerson(idPerson);
     }
 
+    @GetMapping("/dev/search/byPerson")
+    public List<SearchByPersonReservationResponse> searchByPersonDev(@RequestParam int idPerson) {
+        return reservationsService.getReservationsByPersonDev(idPerson);
+    }
+
     @GetMapping("/search/byItem")
     public List<SearchByItemReservationResponse> searchByItem(@RequestParam int idItem) {
         return reservationsService.getReservationsByItem(idItem);
+    }
+
+    @GetMapping("/dev/search/byItem")
+    public List<SearchByItemReservationResponse> searchByItemDev(@RequestParam int idItem) {
+        return reservationsService.getReservationsByItemDev(idItem);
     }
 }

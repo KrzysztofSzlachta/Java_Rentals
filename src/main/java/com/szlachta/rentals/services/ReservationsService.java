@@ -123,6 +123,16 @@ public class ReservationsService {
     }
 
     public List<SearchByPersonReservationResponse> getReservationsByPerson(int idPerson) {
+        List<ReservationEntity> reservationEntities = reservationsRepository.
+                findByPersonIdAndEndTimeIsAfter(idPerson, LocalDateTime.now());
+        List<SearchByPersonReservationResponse> searchByPersonReservationResponses = new ArrayList<>();
+        for (ReservationEntity reservationEntity : reservationEntities) {
+            searchByPersonReservationResponses.add(reservationMapper.searchByPersonFromEntity(reservationEntity));
+        }
+        return searchByPersonReservationResponses;
+    }
+
+    public List<SearchByPersonReservationResponse> getReservationsByPersonDev(int idPerson) {
         List<ReservationEntity> reservationEntities = reservationsRepository.findByPersonId(idPerson);
         List<SearchByPersonReservationResponse> searchByPersonReservationResponses = new ArrayList<>();
         for (ReservationEntity reservationEntity : reservationEntities) {
@@ -132,6 +142,16 @@ public class ReservationsService {
     }
 
     public List<SearchByItemReservationResponse> getReservationsByItem(int idItem) {
+        List<ReservationEntity> reservationEntities = reservationsRepository.
+                findByItemIdAndEndTimeIsAfter(idItem, LocalDateTime.now());
+        List<SearchByItemReservationResponse> searchByItemReservationResponses = new ArrayList<>();
+        for (ReservationEntity reservationEntity : reservationEntities) {
+            searchByItemReservationResponses.add(reservationMapper.searchByItemFromEntity(reservationEntity));
+        }
+        return searchByItemReservationResponses;
+    }
+
+    public List<SearchByItemReservationResponse> getReservationsByItemDev(int idItem) {
         List<ReservationEntity> reservationEntities = reservationsRepository.findByItemId(idItem);
         List<SearchByItemReservationResponse> searchByItemReservationResponses = new ArrayList<>();
         for (ReservationEntity reservationEntity : reservationEntities) {
