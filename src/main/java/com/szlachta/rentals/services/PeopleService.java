@@ -3,13 +3,15 @@ package com.szlachta.rentals.services;
 import com.szlachta.rentals.dto.PersonRequest;
 import com.szlachta.rentals.dto.PersonResponse;
 import com.szlachta.rentals.exceptions.NotFoundException;
-import com.szlachta.rentals.exceptions.InUseException;
+import com.szlachta.rentals.exceptions.ConflictException;
 import com.szlachta.rentals.mappers.PersonMapper;
 import com.szlachta.rentals.models.PersonEntity;
 import com.szlachta.rentals.repositories.PeopleRepository;
+import com.szlachta.rentals.repositories.ReservationsRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +19,13 @@ import java.util.List;
 public class PeopleService {
     private final PeopleRepository peopleRepository;
     private final PersonMapper personMapper;
+    private final ReservationsRepository reservationsRepository;
 
-    public PeopleService(PeopleRepository peopleRepository, PersonMapper personMapper) {
+    public PeopleService(PeopleRepository peopleRepository, PersonMapper personMapper,
+                         ReservationsRepository reservationsRepository) {
         this.peopleRepository = peopleRepository;
         this.personMapper = personMapper;
+        this.reservationsRepository = reservationsRepository;
     }
 
     public PersonResponse getPersonById(int id) {
@@ -46,10 +51,10 @@ public class PeopleService {
         boolean peselCheck = pesel != null && !pesel.isEmpty();
         boolean documentNumberCheck = documentNumber != null && !documentNumber.isEmpty();
         if(peselCheck && peopleRepository.existsByPeselAndDeletedIsTrue(pesel)) {
-            throw new InUseException("Pesel jest już zarejestrowany");
+            throw new ConflictException("Pesel jest już zarejestrowany");
         }
         if(documentNumberCheck && peopleRepository.existsByDocumentNumberAndDeletedIsTrue(documentNumber)) {
-            throw new InUseException("Numer dokumentu jest już zarejestrowany");
+            throw new ConflictException("Numer dokumentu jest już zarejestrowany");
         }
         peopleRepository.save(personMapper.fromRequest(personRequest));
     }
@@ -65,10 +70,10 @@ public class PeopleService {
         boolean peselCheck = pesel != null && !pesel.isEmpty();
         boolean documentNumberCheck = documentNumber != null && !documentNumber.isEmpty();
         if(peselCheck && peopleRepository.existsByPeselAndIdNotAndDeletedIsFalse(pesel, id)) {
-            throw new InUseException("Pesel jest już zarejestrowany");
+            throw new ConflictException("Pesel jest już zarejestrowany");
         }
         if(documentNumberCheck && peopleRepository.existsByDocumentNumberAndIdNotAndDeletedIsFalse(documentNumber, id)) {
-            throw new InUseException("Numer dokumentu jest już zarejestrowany");
+            throw new ConflictException("Numer dokumentu jest już zarejestrowany");
         }
         personEntity.setFirstName(personRequest.getFirstName());
         personEntity.setLastName(personRequest.getLastName());
@@ -84,6 +89,10 @@ public class PeopleService {
         PersonEntity personEntity = peopleRepository.findByIdAndDeletedIsFalse(id).orElse(null);
         if (personEntity == null) {
             throw new NotFoundException("Osoba nie znaleziona");
+        }
+
+        if (!reservationsRepository.existsByPersonIdAndEndTimeIsBefore(id, LocalDateTime.now())){
+            throw new ConflictException("Podana osoba złożyła rezerwację, usuń rezerwację i spróbuj jeszcze raz.");
         }
 
         personEntity.setFirstName("deleted");

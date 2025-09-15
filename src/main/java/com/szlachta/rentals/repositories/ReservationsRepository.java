@@ -14,4 +14,5 @@ public interface ReservationsRepository extends CrudRepository<ReservationEntity
     boolean existsByItemIdAndStartTimeIsBetween(int itemId, LocalDateTime startTime, LocalDateTime endTime);
     boolean existsByItemIdAndStartTimeIsBeforeAndEndTimeIsAfter
             (int itemId, LocalDateTime startTime, LocalDateTime endTime);
+    boolean existsByPersonIdAndEndTimeIsBefore(int personId, LocalDateTime endTime);
 }

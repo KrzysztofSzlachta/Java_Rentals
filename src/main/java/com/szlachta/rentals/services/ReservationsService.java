@@ -6,7 +6,7 @@ import com.szlachta.rentals.dto.SearchByItemReservationResponse;
 import com.szlachta.rentals.dto.SearchByPersonReservationResponse;
 import com.szlachta.rentals.exceptions.BadRequestException;
 import com.szlachta.rentals.exceptions.NotFoundException;
-import com.szlachta.rentals.exceptions.InUseException;
+import com.szlachta.rentals.exceptions.ConflictException;
 import com.szlachta.rentals.mappers.ItemMapper;
 import com.szlachta.rentals.mappers.PersonMapper;
 import com.szlachta.rentals.mappers.ReservationMapper;
@@ -65,16 +65,16 @@ public class ReservationsService {
         reservationEntity.setItem(itemsRepository.findByIdAndDeletedIsFalse(idItem).orElseThrow(()
                 -> new NotFoundException("Przedmiot nie znaleziony")));
         if (reservationsRepository.existsByItemIdAndStartTimeIsBeforeAndEndTimeIsAfter(idItem, startTime, endTime)) {
-            throw new InUseException("Przedmiot zarezerwowany. Spóbuj innej daty");
+            throw new ConflictException("Przedmiot zarezerwowany. Spóbuj innej daty");
         }
         if (endTime.isBefore(startTime)) {
             throw new BadRequestException("Rezerwacja musi się kończyć po tym, jak się zaczyna");
         }
         if (reservationsRepository.existsByItemIdAndStartTimeIsBetween(idItem, startTime, endTime)) {
-            throw new InUseException("Przedmiot zarezerwowany. Spróbuj wcześniejszej daty");
+            throw new ConflictException("Przedmiot zarezerwowany. Spróbuj wcześniejszej daty");
         }
         if (reservationsRepository.existsByItemIdAndEndTimeIsBetween(idItem, startTime, endTime)) {
-            throw new InUseException("Przedmiot zarezerwowany. Spróbuj późniejszej daty");
+            throw new ConflictException("Przedmiot zarezerwowany. Spróbuj późniejszej daty");
         }
 
         reservationEntity.setStartTime(startTime);
@@ -96,16 +96,16 @@ public class ReservationsService {
         reservationEntity.setItem(itemsRepository.findByIdAndDeletedIsFalse(idItem).orElseThrow(()
                 -> new NotFoundException("Przedmiot nie znaleziony")));
         if (reservationsRepository.existsByItemIdAndStartTimeIsBeforeAndEndTimeIsAfter(idItem, startTime, endTime)) {
-            throw new InUseException("Przedmiot zarezerwowany. Spóbuj innej daty");
+            throw new ConflictException("Przedmiot zarezerwowany. Spóbuj innej daty");
         }
         if (endTime.isBefore(startTime)) {
             throw new BadRequestException("Rezerwacja musi się kończyć po tym, jak się zaczyna");
         }
         if (reservationsRepository.existsByItemIdAndStartTimeIsBetween(idItem, startTime, endTime)) {
-            throw new InUseException("Przedmiot zarezerwowany. Spróbuj wcześniejszej daty");
+            throw new ConflictException("Przedmiot zarezerwowany. Spróbuj wcześniejszej daty");
         }
         if (reservationsRepository.existsByItemIdAndEndTimeIsBetween(idItem, startTime, endTime)) {
-            throw new InUseException("Przedmiot zarezerwowany. Spróbuj późniejszej daty");
+            throw new ConflictException("Przedmiot zarezerwowany. Spróbuj późniejszej daty");
         }
 
         reservationEntity.setStartTime(startTime);

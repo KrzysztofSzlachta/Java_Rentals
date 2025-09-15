@@ -48,10 +48,10 @@ public class ControllerExceptionHadler {
         return ResponseEntity.status(404).body(error);
     }
 
-    @ExceptionHandler(InUseException.class)
+    @ExceptionHandler(ConflictException.class)
     @ResponseStatus(HttpStatus.IM_USED)
     public ResponseEntity<BasicErrorResponse> handleInUseException(
-            InUseException ex
+            ConflictException ex
     ){
         BasicErrorResponse error = new BasicErrorResponse();
         error.setMessage(ex.getMessage());
