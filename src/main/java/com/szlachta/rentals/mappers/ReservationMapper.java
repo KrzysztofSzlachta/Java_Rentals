@@ -4,6 +4,8 @@ import com.szlachta.rentals.dto.ReservationRequest;
 import com.szlachta.rentals.dto.ReservationResponse;
 import com.szlachta.rentals.dto.SearchByItemReservationResponse;
 import com.szlachta.rentals.dto.SearchByPersonReservationResponse;
+import com.szlachta.rentals.models.ItemEntity;
+import com.szlachta.rentals.models.PersonEntity;
 import com.szlachta.rentals.models.ReservationEntity;
 import org.springframework.stereotype.Component;
 
@@ -22,24 +24,26 @@ public class ReservationMapper {
         return reservationResponse;
     }
 
-    public SearchByPersonReservationResponse searchByPersonFromEntity(ReservationEntity reservationEntity){
+    public SearchByPersonReservationResponse searchByPersonFromEntity
+            (ReservationEntity reservationEntity, ItemEntity itemEntity){
         ItemMapper itemMapper = new ItemMapper();
         SearchByPersonReservationResponse searchByPersonReservationResponse = new SearchByPersonReservationResponse();
         searchByPersonReservationResponse.setId(reservationEntity.getId());
         searchByPersonReservationResponse.setStartTime(reservationEntity.getStartTime());
         searchByPersonReservationResponse.setEndTime(reservationEntity.getEndTime());
-        searchByPersonReservationResponse.setItem(itemMapper.fromEntity(reservationEntity.getItem()));
+        searchByPersonReservationResponse.setItem(itemMapper.fromEntity(itemEntity));
 
         return searchByPersonReservationResponse;
     }
 
-    public SearchByItemReservationResponse searchByItemFromEntity(ReservationEntity reservationEntity){
+    public SearchByItemReservationResponse searchByItemFromEntity
+            (ReservationEntity reservationEntity, PersonEntity personEntity){
         PersonMapper personMapper = new PersonMapper();
         SearchByItemReservationResponse searchByItemReservationResponse = new SearchByItemReservationResponse();
         searchByItemReservationResponse.setId(reservationEntity.getId());
         searchByItemReservationResponse.setStartTime(reservationEntity.getStartTime());
         searchByItemReservationResponse.setEndTime(reservationEntity.getEndTime());
-        searchByItemReservationResponse.setPerson(personMapper.fromEntity(reservationEntity.getPerson()));
+        searchByItemReservationResponse.setPerson(personMapper.fromEntity(personEntity));
 
         return searchByItemReservationResponse;
     }

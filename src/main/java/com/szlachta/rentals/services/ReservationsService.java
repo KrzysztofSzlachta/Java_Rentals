@@ -1,15 +1,14 @@
 package com.szlachta.rentals.services;
 
-import com.szlachta.rentals.dto.ReservationRequest;
-import com.szlachta.rentals.dto.ReservationResponse;
-import com.szlachta.rentals.dto.SearchByItemReservationResponse;
-import com.szlachta.rentals.dto.SearchByPersonReservationResponse;
+import com.szlachta.rentals.dto.*;
 import com.szlachta.rentals.exceptions.BadRequestException;
-import com.szlachta.rentals.exceptions.NotFoundException;
 import com.szlachta.rentals.exceptions.ConflictException;
+import com.szlachta.rentals.exceptions.NotFoundException;
 import com.szlachta.rentals.mappers.ItemMapper;
 import com.szlachta.rentals.mappers.PersonMapper;
 import com.szlachta.rentals.mappers.ReservationMapper;
+import com.szlachta.rentals.models.ItemEntity;
+import com.szlachta.rentals.models.PersonEntity;
 import com.szlachta.rentals.models.ReservationEntity;
 import com.szlachta.rentals.repositories.ItemsRepository;
 import com.szlachta.rentals.repositories.PeopleRepository;
@@ -29,7 +28,8 @@ public class ReservationsService {
     private final PeopleRepository peopleRepository;
     private final ItemsRepository itemsRepository;
 
-    public ReservationsService(ReservationsRepository reservationsRepository, ReservationMapper reservationMapper, PeopleRepository peopleRepository, ItemsRepository itemsRepository) {
+    public ReservationsService(ReservationsRepository reservationsRepository, ReservationMapper reservationMapper,
+                               PeopleRepository peopleRepository, ItemsRepository itemsRepository) {
         this.reservationsRepository = reservationsRepository;
         this.reservationMapper = reservationMapper;
         this.personMapper = new PersonMapper();
@@ -125,18 +125,31 @@ public class ReservationsService {
     public List<SearchByPersonReservationResponse> getReservationsByPerson(int idPerson) {
         List<ReservationEntity> reservationEntities = reservationsRepository.
                 findByPersonIdAndEndTimeIsAfter(idPerson, LocalDateTime.now());
-        List<SearchByPersonReservationResponse> searchByPersonReservationResponses = new ArrayList<>();
+        List<Integer> ids = new ArrayList<>();
         for (ReservationEntity reservationEntity : reservationEntities) {
-            searchByPersonReservationResponses.add(reservationMapper.searchByPersonFromEntity(reservationEntity));
+            ids.add(reservationEntity.getItemId());
+        }
+        List<ItemEntity> items = itemsRepository.findByIdIn(ids);
+        List<SearchByPersonReservationResponse> searchByPersonReservationResponses = new ArrayList<>();
+        for (int i = 0; i < reservationEntities.size(); i++) {
+            searchByPersonReservationResponses.add(reservationMapper
+                    .searchByPersonFromEntity(reservationEntities.get(i), items.get(i)));
         }
         return searchByPersonReservationResponses;
     }
 
     public List<SearchByPersonReservationResponse> getReservationsByPersonDev(int idPerson) {
-        List<ReservationEntity> reservationEntities = reservationsRepository.findByPersonId(idPerson);
-        List<SearchByPersonReservationResponse> searchByPersonReservationResponses = new ArrayList<>();
+        List<ReservationEntity> reservationEntities = reservationsRepository.
+                findByPersonId(idPerson);
+        List<Integer> ids = new ArrayList<>();
         for (ReservationEntity reservationEntity : reservationEntities) {
-            searchByPersonReservationResponses.add(reservationMapper.searchByPersonFromEntity(reservationEntity));
+            ids.add(reservationEntity.getItemId());
+        }
+        List<ItemEntity> items = itemsRepository.findByIdIn(ids);
+        List<SearchByPersonReservationResponse> searchByPersonReservationResponses = new ArrayList<>();
+        for (int i = 0; i < reservationEntities.size(); i++) {
+            searchByPersonReservationResponses.add(reservationMapper
+                    .searchByPersonFromEntity(reservationEntities.get(i), items.get(i)));
         }
         return searchByPersonReservationResponses;
     }
@@ -144,18 +157,31 @@ public class ReservationsService {
     public List<SearchByItemReservationResponse> getReservationsByItem(int idItem) {
         List<ReservationEntity> reservationEntities = reservationsRepository.
                 findByItemIdAndEndTimeIsAfter(idItem, LocalDateTime.now());
-        List<SearchByItemReservationResponse> searchByItemReservationResponses = new ArrayList<>();
+        List<Integer> ids = new ArrayList<>();
         for (ReservationEntity reservationEntity : reservationEntities) {
-            searchByItemReservationResponses.add(reservationMapper.searchByItemFromEntity(reservationEntity));
+            ids.add(reservationEntity.getPersonId());
+        }
+        List<PersonEntity> people = peopleRepository.findByIdIn(ids);
+        List<SearchByItemReservationResponse> searchByItemReservationResponses = new ArrayList<>();
+        for (int i = 0; i < reservationEntities.size(); i++) {
+            searchByItemReservationResponses.add(reservationMapper.searchByItemFromEntity
+                    (reservationEntities.get(i), people.get(i)));
         }
         return searchByItemReservationResponses;
     }
 
     public List<SearchByItemReservationResponse> getReservationsByItemDev(int idItem) {
-        List<ReservationEntity> reservationEntities = reservationsRepository.findByItemId(idItem);
-        List<SearchByItemReservationResponse> searchByItemReservationResponses = new ArrayList<>();
+        List<ReservationEntity> reservationEntities = reservationsRepository.
+                findByItemId(idItem);
+        List<Integer> ids = new ArrayList<>();
         for (ReservationEntity reservationEntity : reservationEntities) {
-            searchByItemReservationResponses.add(reservationMapper.searchByItemFromEntity(reservationEntity));
+            ids.add(reservationEntity.getPersonId());
+        }
+        List<PersonEntity> people = peopleRepository.findByIdIn(ids);
+        List<SearchByItemReservationResponse> searchByItemReservationResponses = new ArrayList<>();
+        for (int i = 0; i < reservationEntities.size(); i++) {
+            searchByItemReservationResponses.add(reservationMapper.searchByItemFromEntity
+                    (reservationEntities.get(i), people.get(i)));
         }
         return searchByItemReservationResponses;
     }

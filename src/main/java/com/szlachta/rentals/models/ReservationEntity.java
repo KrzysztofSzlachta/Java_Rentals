@@ -27,6 +27,12 @@ public class ReservationEntity {
     @JoinColumn(name = "id_item", referencedColumnName = "id_item")
     private ItemEntity item;
 
+    @Column(name = "id_person", updatable = false, insertable = false)
+    private Integer personId;
+
+    @Column(name = "id_item", updatable = false, insertable = false)
+    private Integer itemId;
+
     public int getId() {
         return id;
     }
@@ -73,5 +79,21 @@ public class ReservationEntity {
 
     public void setItem(ItemEntity item) {
         this.item = item;
+    }
+
+    public Integer getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
+    }
+
+    public Integer getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Integer itemId) {
+        this.itemId = itemId;
     }
 }
